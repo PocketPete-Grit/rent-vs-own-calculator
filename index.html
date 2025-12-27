@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent vs Own Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-calculate {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-calculate:active {
+            transform: translateY(0);
+        }
+
+        .results {
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .results h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8em;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+
+        .winner {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏠 Rent vs Own Calculator</h1>
+        <p class="subtitle">Make an informed decision about your housing future</p>
+        
+        <div class="grid">
+            <div class="input-group">
+                <label for="homePrice">Home Purchase Price ($)</label>
+                <input type="number" id="homePrice" value="300000" min="0">
+            </div>
+            
+            <div class="input-group">
+                <label for="downPayment">Down Payment (%)</label>
+                <input type="number" id="downPayment" value="20" min="0" max="100">
+            </div>
+            
+            <div class="input-group">
+                <label for="interestRate">Mortgage Interest Rate (%)</label>
+                <input type="number" id="interestRate" value="6.5" min="0" step="0.1">
+            </div>
+            
+            <div class="input-group">
+                <label for="loanTerm">Loan Term (years)</label>
+                <input type="number" id="loanTerm" value="30" min="1">
+            </div>
+            
+            <div class="input-group">
+                <label for="propertyTax">Annual Property Tax ($)</label>
+                <input type="number" id="propertyTax" value="3000" min="0">
+            </div>
+            
+            <div class="input-group">
+                <label for="insurance">Annual Home Insurance ($)</label>
+                <input type="number" id="insurance" value="1200" min="0">
+            </div>
+            
+            <div class="input-group">
+                <label for="maintenance">Annual Maintenance ($)</label>
+                <input type="number" id="maintenance" value="3000" min="0">
+            </div>
+            
+            <div class="input-group">
+                <label for="hoa">Monthly HOA Fees ($)</label>
+                <input type="number" id="hoa" value="0" min="0">
+            </div>
+            
+            <div class="input-group">
+                <label for="monthlyRent">Monthly Rent ($)</label>
+                <input type="number" id="monthlyRent" value="2000" min="0">
+            </div>
+            
+            <div class="input-group">
+                <label for="rentIncrease">Annual Rent Increase (%)</label>
+                <input type="number" id="rentIncrease" value="3" min="0" step="0.1">
+            </div>
+            
+            <div class="input-group">
+                <label for="homeAppreciation">Home Appreciation Rate (%)</label>
+                <input type="number" id="homeAppreciation" value="3" min="0" step="0.1">
+            </div>
+            
+            <div class="input-group">
+                <label for="yearsToStay">Years Planning to Stay</label>
+                <input type="number" id="yearsToStay" value="7" min="1">
+            </div>
+        </div>
+        
+        <button class="btn-calculate" onclick="calculate()">Calculate</button>
+        
+        <div class="results" id="results">
+            <h2>Results</h2>
+            <div class="result-item">
+                <span class="result-label">Total Cost to Own:</span>
+                <span class="result-value" id="ownCost">$0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Total Cost to Rent:</span>
+                <span class="result-value" id="rentCost">$0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Home Equity Built:</span>
+                <span class="result-value" id="equity">$0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Home Value After Years:</span>
+                <span class="result-value" id="homeValue">$0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Monthly Mortgage Payment:</span>
+                <span class="result-value" id="monthlyPayment">$0</span>
+            </div>
+            <div class="winner" id="winner"></div>
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            // Get input values
+            const homePrice = parseFloat(document.getElementById('homePrice').value);
+            const downPaymentPct = parseFloat(document.getElementById('downPayment').value) / 100;
+            const interestRate = parseFloat(document.getElementById('interestRate').value) / 100;
+            const loanTerm = parseInt(document.getElementById('loanTerm').value);
+            const propertyTax = parseFloat(document.getElementById('propertyTax').value);
+            const insurance = parseFloat(document.getElementById('insurance').value);
+            const maintenance = parseFloat(document.getElementById('maintenance').value);
+            const hoa = parseFloat(document.getElementById('hoa').value);
+            const monthlyRent = parseFloat(document.getElementById('monthlyRent').value);
+            const rentIncrease = parseFloat(document.getElementById('rentIncrease').value) / 100;
+            const homeAppreciation = parseFloat(document.getElementById('homeAppreciation').value) / 100;
+            const yearsToStay = parseInt(document.getElementById('yearsToStay').value);
+
+            // Calculate mortgage
+            const downPayment = homePrice * downPaymentPct;
+            const loanAmount = homePrice - downPayment;
+            const monthlyRate = interestRate / 12;
+            const numPayments = loanTerm * 12;
+            const monthlyMortgage = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+
+            // Calculate total owning costs
+            let totalOwningCost = downPayment;
+            let remainingBalance = loanAmount;
+            let totalInterestPaid = 0;
+            
+            for (let year = 1; year <= yearsToStay; year++) {
+                for (let month = 1; month <= 12; month++) {
+                    const interestPayment = remainingBalance * monthlyRate;
+                    const principalPayment = monthlyMortgage - interestPayment;
+                    remainingBalance -= principalPayment;
+                    totalInterestPaid += interestPayment;
+                }
+                totalOwningCost += propertyTax + insurance + maintenance + (hoa * 12);
+            }
+
+            totalOwningCost += totalInterestPaid;
+
+            // Calculate equity
+            const principalPaid = loanAmount - remainingBalance;
+            const futureHomeValue = homePrice * Math.pow(1 + homeAppreciation, yearsToStay);
+            const equity = principalPaid + (futureHomeValue - homePrice);
+
+            // Calculate total renting costs
+            let totalRentCost = 0;
+            let currentRent = monthlyRent;
+            
+            for (let year = 1; year <= yearsToStay; year++) {
+                totalRentCost += currentRent * 12;
+                currentRent *= (1 + rentIncrease);
+            }
+
+            // Net cost after selling
+            const netOwningCost = totalOwningCost - equity;
+
+            // Display results
+            document.getElementById('ownCost').textContent = '$' + Math.round(netOwningCost).toLocaleString();
+            document.getElementById('rentCost').textContent = '$' + Math.round(totalRentCost).toLocaleString();
+            document.getElementById('equity').textContent = '$' + Math.round(equity).toLocaleString();
+            document.getElementById('homeValue').textContent = '$' + Math.round(futureHomeValue).toLocaleString();
+            document.getElementById('monthlyPayment').textContent = '$' + Math.round(monthlyMortgage).toLocaleString();
+
+            // Determine winner
+            const savings = totalRentCost - netOwningCost;
+            const winner = document.getElementById('winner');
+            
+            if (savings > 0) {
+                winner.textContent = `✓ Buying saves you $${Math.round(savings).toLocaleString()} over ${yearsToStay} years!`;
+                winner.style.background = 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)';
+            } else {
+                winner.textContent = `✓ Renting saves you $${Math.round(Math.abs(savings)).toLocaleString()} over ${yearsToStay} years!`;
+                winner.style.background = 'linear-gradient(135deg, #ee0979 0%, #ff6a00 100%)';
+            }
+
+            // Show results
+            document.getElementById('results').classList.add('show');
+        }
+    </script>
+</body>
+</html>
